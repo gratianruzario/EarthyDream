@@ -1,4 +1,7 @@
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-list',
@@ -6,9 +9,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
+  productList: any[] = [];
+  constructor( private db: AngularFirestore) { }
 
-  constructor() { }
+  ngOnInit() {
+    this.getAllProducts();
+  }
 
-  ngOnInit() {}
+  getAllProducts() {
+    this.db.collection('products').snapshotChanges().pipe(
+      map(actions => actions.map((action, i) => {
+
+        const data = action.payload.doc.data();
+        const id = action.payload.doc.id;
+
+        return { id, ...data };
+      }))
+    ).subscribe(products => {
+      this.productList = products;
+    });
+
+
+  }
 
 }
