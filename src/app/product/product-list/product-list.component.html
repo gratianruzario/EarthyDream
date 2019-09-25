@@ -16,7 +16,7 @@
          
           <ion-col size="6" *ngFor="let product of productList"> 
               <ion-card>
-                  <img src="../../../assets/images/cottonCB.jpg" alt="" />
+                  <img style="width:250px;" src="{{product.thumbnail}}" alt="" />
                 <ion-card-header>
                   <ion-card-subtitle>{{product.name}}</ion-card-subtitle>
                   <ion-card-title>{{product.name}}</ion-card-title>
