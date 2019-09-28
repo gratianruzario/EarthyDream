@@ -4,11 +4,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '../../../node_modules/@angular/forms';
 import { IonicModule } from '../../../node_modules/@ionic/angular';
 import { ProductListComponent } from './product-list/product-list.component';
+import { AngularFireAuth } from '../../../node_modules/@angular/fire/auth';
+import { ShowAuthedDirective } from 'src/app/shared/diretives/showAuthed.directive';
 
 
 
 @NgModule({
-  declarations: [ProductListComponent],
+  declarations: [ProductListComponent,ShowAuthedDirective],
+  providers:[],
   imports: [
     CommonModule,
     FormsModule,

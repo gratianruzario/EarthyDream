@@ -13,7 +13,10 @@ import { AngularFireModule } from '@angular/fire';
 
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthModule, AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from './shared/services/auth-service.service';
+import { ShowAuthedDirective } from './shared/diretives/showAuthed.directive';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +29,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     AngularFirestoreModule
   ],
   providers: [
+    AngularFireAuth,
+    AuthService,
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

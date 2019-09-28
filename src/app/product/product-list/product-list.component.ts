@@ -2,7 +2,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnInit } from '@angular/core';
 import { Observable, from, of, combineLatest, concat, forkJoin } from 'rxjs';
 import { switchMap, map, mergeMap, toArray, take, mergeAll, concatMap, tap, scan, flatMap, first, last } from 'rxjs/operators';
-import { currentId } from 'async_hooks';
+import { AngularFireAuth } from '../../../../node_modules/@angular/fire/auth';
+import { auth } from 'firebase/app';
 
 @Component({
   selector: 'app-product-list',
@@ -12,10 +13,29 @@ import { currentId } from 'async_hooks';
 export class ProductListComponent implements OnInit {
   productList: any[] = [];
   productImages = {};
-  constructor( private db: AngularFirestore) { }
+  constructor( private db: AngularFirestore , public afAuth: AngularFireAuth) { }
 
   ngOnInit() {
     this.getAllProducts();
+  }
+
+  login() {
+    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider()).then(cred=>{
+        this.updateOrInsertUser(cred.user);
+    });
+  }
+
+  updateOrInsertUser(user) {
+    const userRef = this.db.doc('users/' + user.uid);
+    const data ={
+      uid:user.uid,
+      email:user.email,
+      roles:{
+        admin:true
+      }
+    }
+
+    return userRef.set(data, {merge:true});
   }
 
 
@@ -67,6 +87,10 @@ export class ProductListComponent implements OnInit {
 
   getProductImages(id): Observable<any> {
         return this.db.doc(`productImages/${ id}`).valueChanges().pipe(take(1));
+  }
+
+  logout() {
+    this.afAuth.auth.signOut();
   }
 
 }
